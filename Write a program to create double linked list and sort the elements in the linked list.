@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+    struct Node* prev;
+};
+
+void push(struct Node** head_ref, int new_data) {
+    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+    new_node->data = new_data;
+    new_node->next = *head_ref;
+    new_node->prev = NULL;
+    if (*head_ref != NULL) {
+        (*head_ref)->prev = new_node;
+    }
+    *head_ref = new_node;
+}
+
+void sortList(struct Node* head) {
+    struct Node* i = head;
+    struct Node* j;
+    int temp;
+    while (i != NULL) {
+        j = i->next;
+        while (j != NULL) {
+            if (i->data > j->data) {
+                temp = i->data;
+                i->data = j->data;
+                j->data = temp;
+            }
+            j = j->next;
+        }
+        i = i->next;
+    }
+}
+
+void displayList(struct Node* head) {
+    struct Node* temp = head;
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    struct Node* head = NULL;
+    int n, data;
+
+    printf("Enter the number of elements: ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        printf("Enter data for node %d: ", i + 1);
+        scanf("%d", &data);
+        push(&head, data);
+    }
+
+    printf("Original list: ");
+    displayList(head);
+
+    sortList(head);
+
+    printf("Sorted list: ");
+    displayList(head);
+
+    return 0;
+}
